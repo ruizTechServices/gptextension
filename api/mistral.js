@@ -19,7 +19,7 @@ router.post('/chatbot', async (req, res) => {
         return res.status(400).send('Missing required field: userMessage');
     }
 
-    const apiUrl = 'https://api.mistral.com/v1/chat/completions'; // Replace with the correct endpoint for Mistral
+    const apiUrl = 'https://api.mistral.ai/v1/chat/completions'; // Replace with the correct endpoint for Mistral
 
     try {
         const response = await axios.post(
