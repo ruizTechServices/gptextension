@@ -1,9 +1,11 @@
 const express = require('express');
-const MistralClient = require('@mistralai/mistralai');
+const mistralai = require('@mistralai/mistralai'); // Import the entire module as an object
 const router = express.Router();
 
 const apiKey = process.env.MISTRAL_API_KEY || 'DVwykfTrlqnAkLnpFmn3ejhg1QoVi8gT';
-const client = new MistralClient(apiKey);
+
+// Create a client instance or configure it using the function directly
+const client = mistralai(apiKey);
 
 router.post('/chatbot', async (req, res) => {
     const {
