@@ -1,22 +1,19 @@
 const express = require('express');
-const dotenv = require('dotenv');
-const chatRoutes = require('./chatRoutes');
-const modelRoutes = require('./modelRoutes');
+const router = express.Router();
+const Together = require('together-ai');
 
-dotenv.config();
-
-const app = express();
-const port = process.env.PORT || 3000;
-
-app.use(express.json());
-
-app.use('/api', chatRoutes);
-app.use('/api', modelRoutes);
-
-app.use((req, res) => {
-  res.status(404).send('404 Not Found');
+const together = new Together({
+  apiKey: process.env.TOGETHER_API_KEY,
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+router.get('/models', async (req, res) => {
+  try {
+    const models = await together.models.list();
+    res.json(models);
+  } catch (error) {
+    console.error('Error in models route:', error);
+    res.status(500).json({ error: 'An error occurred while fetching models' });
+  }
 });
+
+module.exports = router;
