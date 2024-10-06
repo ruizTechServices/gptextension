@@ -1,56 +1,32 @@
 const express = require('express');
-const axios = require('axios');
+const MistralClient = require('@mistralai/mistralai');
 const router = express.Router();
+
+const apiKey = process.env.MISTRAL_API_KEY || 'DVwykfTrlqnAkLnpFmn3ejhg1QoVi8gT';
+const client = new MistralClient(apiKey);
 
 router.post('/chatbot', async (req, res) => {
     const {
         userMessage,
-        model = 'mistral-small-latest',
-        temperature = 0.7,
-        top_p = 1,
-        max_tokens = 450,
-        min_tokens = 0,
-        stream = false,
-        stop = null,
-        random_seed = null
+        model = 'mistral-large-latest'
     } = req.body;
 
     if (!userMessage) {
         return res.status(400).send('Missing required field: userMessage');
     }
 
-    const apiUrl = 'https://api.mistral.ai/v1/chat/completions'; // Replace with the correct endpoint for Mistral
-
     try {
-        const response = await axios.post(
-            apiUrl,
-            {
-                model: model,
-                temperature: temperature,
-                top_p: top_p,
-                max_tokens: max_tokens,
-                min_tokens: min_tokens,
-                stream: stream,
-                stop: stop,
-                random_seed: random_seed,
-                messages: [{ role: 'user', content: userMessage }],
-                response_format: {
-                    type: 'text'
-                },
-                tool_choice: 'auto',
-                safe_prompt: false
-            },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${process.env.MISTRAL_API_KEY}`
-                }
-            }
-        );
+        // Call Mistral's chat completion API
+        const chatResponse = await client.chat({
+            model: model,
+            messages: [{ role: 'user', content: userMessage }],
+        });
 
-        res.json({ botResponse: response.data.choices[0]?.content.trim() });
+        // Extract and send back the bot's response
+        const botMessage = chatResponse.choices[0].message.content;
+        res.status(200).json({ botResponse: botMessage });
     } catch (error) {
-        console.error('Error:', error.response?.data || error.message);
+        console.error('Error:', error);
         res.status(500).send("I'm sorry, I'm having trouble responding right now.");
     }
 });
