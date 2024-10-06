@@ -1,8 +1,10 @@
 const express = require('express');
 const app = express();
-const port = 3000;
-const dataRoutes = require('./routes/dataRoutes');
 
+// Use process.env.PORT if available, otherwise default to 3000 (for local development)
+const port = process.env.PORT || 3000;
+
+// Middleware to parse incoming JSON requests
 app.use(express.json());
 
 // Simple GET route
@@ -10,8 +12,11 @@ app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
 
-// Use the data routes
-app.use('/data', dataRoutes);
+// Simple POST route
+app.post('/data', (req, res) => {
+  const data = req.body;
+  res.send(`You sent: ${JSON.stringify(data)}`);
+});
 
 // 404 route for unmatched paths
 app.use((req, res) => {
