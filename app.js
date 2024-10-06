@@ -1,19 +1,24 @@
 const express = require('express');
 const app = express();
-const dotenv = require('dotenv');
-const queryRoutes = require('./routes/query'); // Import the query routes
-const userRoutes = require('./routes/user');   // Import user routes
-
-dotenv.config(); // Load environment variables from .env
+const port = 3000;
+const dataRoutes = require('./routes/dataRoutes');
 
 app.use(express.json());
 
-// Route handlers
-app.use('/api/query', queryRoutes); // For handling queries and embeddings
-app.use('/api/user', userRoutes);   // For handling user-related requests
+// Simple GET route
+app.get('/', (req, res) => {
+  res.send('Hello, World!');
+});
+
+// Use the data routes
+app.use('/data', dataRoutes);
+
+// 404 route for unmatched paths
+app.use((req, res) => {
+  res.status(404).send('404 Not Found');
+});
 
 // Start the server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
 });
