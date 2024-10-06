@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const chatRoutes = require('./routes/chatRoutes');
 const modelRoutes = require('./routes/modelRoutes');
+const gpt4Routes = require('./routes/gpt-4');
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ app.use(express.json());
 
 app.use('/api', chatRoutes);
 app.use('/api', modelRoutes);
+app.use('/chat', gpt4Routes);
 
 app.get('/', (req, res) => {
   res.send('24HourGPT Backend is running!');
