@@ -1,15 +1,13 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const cors = require('cors');
-const chatRoutes = require('./chatRoutes');
-const modelRoutes = require('./modelRoutes');
+const chatRoutes = require('./routes/chatRoutes');
+const modelRoutes = require('./routes/modelRoutes');
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(cors());
 app.use(express.json());
 
 app.use('/api', chatRoutes);
