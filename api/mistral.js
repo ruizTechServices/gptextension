@@ -2,7 +2,7 @@ const express = require('express');
 const mistralai = require('@mistralai/mistralai'); // Import the entire module as an object
 const router = express.Router();
 
-const apiKey = process.env.MISTRAL_API_KEY || 'DVwykfTrlqnAkLnpFmn3ejhg1QoVi8gT';
+const apiKey = process.env.MISTRAL_API_KEY;
 
 // Create a client instance or configure it using the function directly
 const client = mistralai(apiKey);
