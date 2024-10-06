@@ -31,7 +31,7 @@ router.post('/chat', async (req, res) => {
     res.end();
   } catch (error) {
     console.error('Error in chat route:', error);
-    res.status(500).json({ error: 'An error occurred while processing your request' });
+    res.status(500).json({ error: 'Sorry, there was a problem processing your request.' });
   }
 });
 

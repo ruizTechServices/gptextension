@@ -9,7 +9,7 @@ const together = new Together({
 router.get('/models', async (req, res) => {
   try {
     const models = await together.models.list();
-    res.json(models);
+    res.json({ data: models }); // Wrap the models in a 'data' property
   } catch (error) {
     console.error('Error in models route:', error);
     res.status(500).json({ error: 'An error occurred while fetching models' });
