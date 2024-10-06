@@ -1,12 +1,16 @@
-//app.js
+// app.js
 const express = require('express');
 const dotenv = require('dotenv');
+const cors = require('cors');
 const gpt4Routes = require('./api/gpt-4');
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+// Add this line to enable CORS
+app.use(cors());
 
 app.use(express.json());
 
