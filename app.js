@@ -1,4 +1,4 @@
-// Import required modules
+// app.js
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
@@ -47,3 +47,7 @@ app.use((req, res) => {
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
+
+
+
+///this is backend is https://chrome-24hourgpt-5bb1bcb92d7e.herokuapp.com/
