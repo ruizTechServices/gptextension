@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const gpt4Routes = require('./api/gpt-4');
 const mistralRoutes = require('./api/mistral');
+const embeddingsRoutes = require('./api/embeddings');
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 // Routes
 app.use('/chat', gpt4Routes);
 app.use('/mistral', mistralRoutes);
+app.use('/embeddings', embeddingsRoutes);
 
 app.get('/', (req, res) => {
     res.send('24HourGPT Backend is running!');
