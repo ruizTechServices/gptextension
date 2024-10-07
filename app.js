@@ -9,7 +9,7 @@ const { Pinecone } = require('@pinecone-database/pinecone');
 dotenv.config();
 
 // Initialize Redis and Pinecone clients
-const redis = new Redis(process.env.REDIS_URL);
+const redis = new Redis(process.env.REDISCLOUD_URL);
 const pinecone = new Pinecone({
     apiKey: process.env.PINECONE_API_KEY,
 });
