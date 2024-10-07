@@ -1,11 +1,14 @@
 const express = require('express');
-const mistralai = require('@mistralai/mistralai'); // Import the entire module as an object
+const mistralai = require('@mistralai/mistralai'); // Import the module as an object
 const router = express.Router();
 
 const apiKey = process.env.MISTRAL_API_KEY;
 
-// Create a client instance or configure it using the function directly
-const client = mistralai(apiKey);
+if (!apiKey) {
+    throw new Error('Missing MISTRAL_API_KEY environment variable');
+}
+
+const client = mistralai(apiKey); // Initialize the client instance
 
 router.post('/chatbot', async (req, res) => {
     const {
@@ -25,7 +28,7 @@ router.post('/chatbot', async (req, res) => {
         });
 
         // Extract and send back the bot's response
-        const botMessage = chatResponse.choices[0].message.content;
+        const botMessage = chatResponse.choices[0]?.message?.content || 'No response';
         res.status(200).json({ botResponse: botMessage });
     } catch (error) {
         console.error('Error:', error);
