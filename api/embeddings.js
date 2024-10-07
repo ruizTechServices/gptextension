@@ -1,34 +1,31 @@
-//api/embeddings.js
+// api/embeddings.js
 const express = require('express');
-const axios = require('axios');
 const router = express.Router();
-const dotenv = require('dotenv');
+const { saveEmbeddingsToRedis, getEmbeddingsFromRedis, saveEmbeddingsToPinecone } = require('../utils/embeddingUtils');
 
-dotenv.config();
-
-const openaiApiUrl = 'https://api.openai.com/v1/embeddings';
-
-router.post('/generate', async (req, res) => {
-    const { input, model = 'text-embedding-ada-002' } = req.body;
+router.post('/embeddings', async (req, res) => {
+    const { input, model = 'text-embedding-ada-002', saveEmbeddings = false } = req.body;
 
     if (!input) {
         return res.status(400).send('Missing required field: input');
     }
 
     try {
-        const response = await axios.post(openaiApiUrl, {
-            model: model,
-            input: input,
-        }, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
-            }
-        });
+        // Generate embeddings (this would be replaced with actual API call logic)
+        const embedding = [0.1, 0.2, 0.3, 0.4]; // Placeholder for actual embedding generation
 
-        res.json({ embeddings: response.data.data[0].embedding });
+        if (saveEmbeddings) {
+            const key = `embedding:${model}:${input}`;
+            // Save to Redis cache first
+            await saveEmbeddingsToRedis(key, embedding);
+
+            // Optionally save to Pinecone for long-term storage
+            await saveEmbeddingsToPinecone('24hourgpt', key, embedding);
+        }
+
+        res.json({ embeddings: embedding });
     } catch (error) {
-        console.error('Error:', error.response?.data || error.message);
+        console.error('Error generating or saving embeddings:', error);
         res.status(500).send("I'm sorry, I'm having trouble generating embeddings right now.");
     }
 });
