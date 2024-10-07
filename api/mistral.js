@@ -8,7 +8,15 @@ if (!apiKey) {
     throw new Error('Missing MISTRAL_API_KEY environment variable');
 }
 
-const client = mistralai(apiKey); // Initialize the client instance
+let client;
+
+try {
+    client = mistralai(apiKey); // Initialize the client instance
+    console.log('Mistral client initialized successfully.');
+} catch (initError) {
+    console.error('Failed to initialize Mistral client:', initError);
+    throw new Error('Mistral client initialization failed.');
+}
 
 router.post('/chatbot', async (req, res) => {
     const {
@@ -22,6 +30,7 @@ router.post('/chatbot', async (req, res) => {
 
     try {
         // Call Mistral's chat completion API
+        console.log('Sending request to Mistral API...');
         const chatResponse = await client.chat({
             model: model,
             messages: [{ role: 'user', content: userMessage }],
@@ -31,7 +40,7 @@ router.post('/chatbot', async (req, res) => {
         const botMessage = chatResponse.choices[0]?.message?.content || 'No response';
         res.status(200).json({ botResponse: botMessage });
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error while calling Mistral API:', error);
         res.status(500).send("I'm sorry, I'm having trouble responding right now.");
     }
 });
