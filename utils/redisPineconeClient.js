@@ -1,4 +1,4 @@
-// redisPineconeClient.js
+// utils\redisPineconeClient.js
 const Redis = require('ioredis');
 const { Pinecone } = require('@pinecone-database/pinecone');
 

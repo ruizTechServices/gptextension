@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>24HourGPT Backend</title>
+    <link href="/output.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div
+      class="min-h-screen bg-gray-100 flex flex-col justify-center items-center px-4"
+    >
+      <header class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-blue-600 mb-2">24HourGPT</h1>
+        <p class="text-xl text-gray-600">Your AI chatbot for only $1!</p>
+      </header>
+
+      <main class="w-full max-w-md">
+        <div class="bg-white shadow-md rounded-lg p-6">
+          <div id="chat-messages" class="mb-4 h-64 overflow-y-auto">
+            <!-- Chat messages will be dynamically inserted here -->
+          </div>
+
+          <form id="chat-form" class="flex">
+            <input
+              type="text"
+              id="user-input"
+              class="flex-grow border rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Type your message..."
+            />
+            <button
+              type="submit"
+              class="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600 transition duration-300"
+            >
+              Send
+            </button>
+          </form>
+        </div>
+      </main>
+
+      <footer class="mt-8 text-center text-gray-500">
+        <p>© 2023 24HourGPT. All rights reserved.</p>
+      </footer>
+    </div>
+
+    <script>
+      const chatForm = document.getElementById("chat-form");
+      const userInput = document.getElementById("user-input");
+      const chatMessages = document.getElementById("chat-messages");
+      const apiSelect = document.getElementById("api-select");
+
+      chatForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const message = userInput.value.trim();
+        if (message) {
+          appendMessage("You", message);
+          userInput.value = "";
+
+          const selectedApi = apiSelect.value;
+          try {
+            const response = await callApi(selectedApi, message);
+            appendMessage("24HourGPT", response);
+          } catch (error) {
+            appendMessage("Error", "Failed to get a response from the API");
+          }
+        }
+      });
+
+      function appendMessage(sender, text) {
+        const messageElement = document.createElement("div");
+        messageElement.className = "mb-2";
+        messageElement.innerHTML = `<strong>${sender}:</strong> ${text}`;
+        chatMessages.appendChild(messageElement);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      async function callApi(api, message) {
+        let url = "";
+        if (api === "gpt-4") {
+          url = "/api/gpt-4";
+        } else if (api === "mistral") {
+          url = "/api/mistral";
+        }
+
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ message }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+        return data.response;
+      }
+    </script>
+  </body>
+</html>

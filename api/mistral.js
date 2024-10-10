@@ -1,3 +1,4 @@
+// api\mistral.js
 const express = require('express');
 const { Mistral } = require('@mistralai/mistralai'); // Correctly import Mistral class
 const router = express.Router();
