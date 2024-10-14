@@ -23,16 +23,18 @@ router.post('/upload', upload.single('image'), async (req, res) => {
 
         // Upload the image to Supabase Storage
         const { data, error } = await supabase.storage
-            .from('images') 
+            .from('images')
             .upload(`${fileName}`, req.file.buffer, {
-                cacheControl: '3600', // Set caching rules, e.g., 1 hour
-                upsert: false, // Prevent overwriting
+                cacheControl: '3600',
+                upsert: false,
                 contentType: req.file.mimetype,
             });
 
         if (error) {
+            console.error('Supabase upload error:', error);
             return res.status(500).json({ error: 'Failed to upload image to Supabase' });
         }
+
 
         // Get the public URL of the uploaded image
         const { publicURL } = supabase.storage
