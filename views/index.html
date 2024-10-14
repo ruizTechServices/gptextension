@@ -4,37 +4,24 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>24HourGPT Backend</title>
-    <link href="/output.css" rel="stylesheet" />
+    <link href="/public/output.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css">
   </head>
   <body>
     <div
       class="min-h-screen bg-gray-900 flex flex-col justify-center items-center px-4"
     >
       <header class="text-center mb-8">
-        <h1 class="text-5xl font-bold text-green-400 mb-2">Nucleus-bot</h1> <!-- Corrected spelling -->
-        <p class="text-xl text-gray-300">An HQ for AI inference</p>
+        <h1 class="text-6xl font-extrabold text-green-400 mb-4">Welcome to Nucleus-bot</h1>
+        <p class="text-2xl text-gray-300">The Ultimate HQ for AI Inference</p>
       </header>
 
-      <main class="w-full max-w-md">
-        <div class="bg-gray-800 shadow-lg rounded-lg p-6">
-          <div id="inference-results" class="mb-4 h-64 overflow-y-auto text-gray-300">
-            <!-- Inference results will be dynamically inserted here -->
-          </div>
-
-          <form id="inference-form" class="flex">
-            <input
-              type="text"
-              id="model-input"
-              class="flex-grow border border-gray-700 bg-gray-700 text-white rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-              placeholder="Enter your AI model input..."
-            />
-            <button
-              type="submit"
-              class="bg-green-500 text-white px-4 py-2 rounded-r-lg hover:bg-green-600 transition duration-300"
-            >
-              Run
-            </button>
-          </form>
+      <main class="w-full max-w-3xl text-center">
+        <div class="bg-gray-800 shadow-2xl rounded-lg p-10 mb-8">
+          <h2 class="text-4xl font-bold text-green-400 mb-4">Revolutionizing AI Interaction</h2>
+          <p class="text-xl text-gray-300 mb-6">Experience the future of AI with Nucleus-bot, where cutting-edge technology meets seamless integration.</p>
+          <img src="/public/nucleus-bot.png" alt="Nucleus-bot" class="mx-auto mb-6 w-64 h-64 object-cover rounded-full shadow-lg">
+          <p class="text-lg text-gray-300">Join us in transforming the way AI inference is conducted, with unparalleled precision and efficiency.</p>
         </div>
       </main>
 
@@ -42,55 +29,6 @@
         <p>© 2023 Nucleus-Bot. All rights reserved.</p>
       </footer>
     </div>
-
-    <script>
-      const inferenceForm = document.getElementById("inference-form");
-      const modelInput = document.getElementById("model-input");
-      const inferenceResults = document.getElementById("inference-results");
-
-      inferenceForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const request = modelInput.value.trim();
-        if (request) {
-          appendMessage("Request", request);
-          modelInput.value = "";
-
-          try {
-            const mistralResponse = await callApi("https://chrome-24hourgpt-5bb1bcb92d7e.herokuapp.com/mistral/chatbot", request);
-            appendMessage("Mistral", mistralResponse);
-
-            const chatResponse = await callApi("https://chrome-24hourgpt-5bb1bcb92d7e.herokuapp.com/chat/chatbot", request);
-            appendMessage("Chat", chatResponse);
-          } catch (error) {
-            appendMessage("Error", `Failed to get a response: ${error.message}`);
-          }
-        }
-      });
-
-      function appendMessage(sender, text) {
-        const messageElement = document.createElement("div");
-        messageElement.className = "mb-2";
-        messageElement.innerHTML = `<strong>${sender}:</strong> ${text}`;
-        inferenceResults.appendChild(messageElement);
-        inferenceResults.scrollTop = inferenceResults.scrollHeight;
-      }
-
-      async function callApi(url, request) {
-        const response = await fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ request }),
-        });
-
-        if (!response.ok) {
-          throw new Error(`Network error: ${response.status} - ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        return data.response;
-      }
-    </script>
+    
   </body>
 </html>
