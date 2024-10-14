@@ -24,7 +24,7 @@ router.post('/upload', upload.single('image'), async (req, res) => {
         // Upload the image to Supabase Storage
         const { data, error } = await supabase.storage
             .from('images') 
-            .upload(`public/${fileName}`, req.file.buffer, {
+            .upload(`${fileName}`, req.file.buffer, {
                 cacheControl: '3600', // Set caching rules, e.g., 1 hour
                 upsert: false, // Prevent overwriting
                 contentType: req.file.mimetype,
@@ -37,7 +37,7 @@ router.post('/upload', upload.single('image'), async (req, res) => {
         // Get the public URL of the uploaded image
         const { publicURL } = supabase.storage
             .from('images')
-            .getPublicUrl(`public/${fileName}`);
+            .getPublicUrl(`${fileName}`);
 
         // Respond with the CDN URL of the image
         return res.status(200).json({ imageUrl: publicURL });
